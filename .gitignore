@@ -235,3 +235,4 @@ dist/
 
 # OS
 .DS_Store
+frontend/.env*
