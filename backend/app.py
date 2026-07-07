@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import os
 from dotenv import load_dotenv
@@ -8,13 +8,7 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/health", methods=["GET"])
-def health_check():
-    return jsonify({"status": "ok", "service": "TrueOrder backend"}), 200
-
-@app.route("/api/orders", methods=["GET"])
-def get_orders_mock():
-    MOCK_ORDERS = [
+MOCK_ORDERS = [
     {
         "id": "ord_001", "customer_name": "Sharma Traders", "customer_email": "sharma@traders.com",
         "status": "exception", "total_amount": 6000.0,
@@ -48,8 +42,20 @@ def get_orders_mock():
     },
 ]
 
+@app.route("/", methods=["GET"])
+def root():
+    return jsonify({
+        "status": "ok",
+        "service": "TrueOrder backend",
+        "endpoints": ["/health", "/api/orders", "/api/orders/<id>"]
+    }), 200
+
+@app.route("/health", methods=["GET"])
+def health_check():
+    return jsonify({"status": "ok", "service": "TrueOrder backend"}), 200
+
 @app.route("/api/orders", methods=["GET"])
-def get_orders_mock():
+def get_orders():
     return jsonify(MOCK_ORDERS), 200
 
 @app.route("/api/orders/<order_id>", methods=["GET"])
@@ -61,9 +67,11 @@ def get_order_detail(order_id):
 
 @app.route("/api/orders/<order_id>/status", methods=["PATCH"])
 def update_status(order_id):
-    from flask import request
     order = next((o for o in MOCK_ORDERS if o["id"] == order_id), None)
     if not order:
         return jsonify({"error": "Order not found"}), 404
     order["status"] = request.json.get("status", order["status"])
     return jsonify(order), 200
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)
