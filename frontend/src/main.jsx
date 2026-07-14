@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import App from "./App.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import OrderDetail from "./pages/OrderDetail.jsx";
 import RepairChat from "./pages/RepairChat.jsx";

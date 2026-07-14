@@ -1,10 +1,5 @@
 import { useState, useEffect } from "react";
 import { DndContext, closestCorners } from "@dnd-kit/core";
-import {
-  SortableContext,
-  arrayMove,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
 import { getOrders, updateOrderStatus } from "../api/client";
 import KanbanColumn from "./KanbanColumn";
 
